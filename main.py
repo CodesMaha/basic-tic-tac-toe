@@ -2,8 +2,8 @@ import pygame; pygame.init()
 from sys import exit
 from rendering.icons import SCREEN_SIZE
 from rendering.display_grid import draw_grid
-from core.data_handler import increment_score
 from rendering.display_score import draw_win_msg, draw_scores
+from core.data_handler import increment_score
 import core.surf_collision as collisions
 import core.grid as g
 from core.mechanics.other_turn import computer_choose
@@ -41,12 +41,11 @@ while running:
         
         if (event.type == pygame.MOUSEBUTTONUP) and (not winner):
             collided = collisions.check_grid(pygame.mouse.get_pos())
-            grid = g.modify_grid(grid, "x", collided)
-            # TODO: fix bug where comp takes turn if empty slot chosen
-            if collided: 
+            if (collided) and (g.is_slot_available(grid, collided)): 
+                grid = g.modify_grid(grid, "x", collided)
                 grid = g.modify_grid(grid, "o", computer_choose(grid))
                 collided = None
-            winner = decide_winner(grid)
+                winner = decide_winner(grid)
 
     draw_grid(screen, grid)
     draw_scores(screen)
