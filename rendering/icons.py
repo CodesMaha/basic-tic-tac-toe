@@ -6,7 +6,7 @@ which are the lines of the grid and the icons for a nought and cross
 import pygame
 from . import colours as col
 import core.coord_calc as cc
-from core.mechanics.check_win import G_SIZE
+from core.grid import G_SIZE
 
 SCREEN_SIZE = (640, 580) # not pygame.RESIZEABLE
 LINE_WEIGHT = 10
@@ -18,7 +18,7 @@ surf_grid.fill(col.BG)
 SQUARE_WIDTH = surf_grid.get_height() // G_SIZE
 MARGIN_IC = SQUARE_WIDTH // 6
 # list of lists to hold individual square positions
-pos_grid: list[list[tuple[int,int]]] = [[(0,0) for x in range(G_SIZE)] for x in range(G_SIZE)]
+pos_grid: list[list[tuple[int,int]]] = [[(0,0) for _ in range(G_SIZE)] for _ in range(G_SIZE)]
 
 
 def get_grid_pos(_pos_grid: list[list[tuple[int,int]]]) -> list[list[tuple[int,int]]]:
