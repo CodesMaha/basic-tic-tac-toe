@@ -2,7 +2,7 @@
 
 import pygame
 from rendering.icons import SQUARE_WIDTH, pos_grid
-from core.mechanics.check_win import G_SIZE
+from core.grid import G_SIZE
 
 single_square = pygame.Surface((SQUARE_WIDTH, SQUARE_WIDTH))
 

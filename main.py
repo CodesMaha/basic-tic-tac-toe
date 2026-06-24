@@ -4,34 +4,18 @@ from sys import exit
 from rendering.icons import SCREEN_SIZE
 from rendering.display_grid import draw_grid
 from rendering.display_score import draw_win_msg, draw_scores
-from core.data_handler import increment_score
 
 import core.surf_collision as collisions
-from core.grid import Grid
-from core.mechanics.other_turn import computer_choose
-from core.mechanics.check_win import is_win, is_draw
+from core.grid import Grid, Winner
+from core.other_turn import computer_choose
 
 # initializations
 screen = pygame.display.set_mode(SCREEN_SIZE)
 pygame.display.set_caption("tic-tac-toe")
 
-winner: str | None = None
 g = Grid() # board is g.grid
+winner: Winner = Winner.CONTINUE
 clock = pygame.time.Clock()
-
-def decide_winner(grid_) -> str | None:
-    """ decide value of winner after turns """
-    if winner: # already not None
-        return winner
-    
-    if is_draw(grid_):
-        return "draw"
-    
-    for i in ("x", "o"):
-        if is_win(grid_, i):
-            increment_score(i)
-            return i
-    return None # if no break in loop
 
 running = True
 while running:
@@ -41,18 +25,18 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         
-        if (event.type == pygame.MOUSEBUTTONUP) and (not winner):
+        if (event.type == pygame.MOUSEBUTTONUP) and (not winner.value):
             collided = collisions.check_grid(pygame.mouse.get_pos())
             if (collided) and (g.is_slot_available(collided)): 
-                g.modify_grid("x", collided)
-                g.modify_grid("o", computer_choose(g.grid))
+                g.modify_grid(Winner.X, collided)
+                g.modify_grid(Winner.O, computer_choose(g.grid))
                 collided = None
-                winner = decide_winner(g.grid)
+                winner = g.is_win()
 
     draw_grid(screen, g.grid)
     draw_scores(screen)
-    if winner:
-        draw_win_msg(screen, winner)
+    if winner.value:
+        draw_win_msg(screen, winner.value)
 
     pygame.display.flip()
 
