@@ -1,11 +1,13 @@
 import pygame; pygame.init()
 from sys import exit
+
 from rendering.icons import SCREEN_SIZE
 from rendering.display_grid import draw_grid
 from rendering.display_score import draw_win_msg, draw_scores
 from core.data_handler import increment_score
+
 import core.surf_collision as collisions
-import core.grid as g
+from core.grid import Grid
 from core.mechanics.other_turn import computer_choose
 from core.mechanics.check_win import is_win, is_draw
 
@@ -14,7 +16,7 @@ screen = pygame.display.set_mode(SCREEN_SIZE)
 pygame.display.set_caption("tic-tac-toe")
 
 winner: str | None = None
-grid = g.reset_grid()
+g = Grid() # board is g.grid
 clock = pygame.time.Clock()
 
 def decide_winner(grid_) -> str | None:
@@ -41,13 +43,13 @@ while running:
         
         if (event.type == pygame.MOUSEBUTTONUP) and (not winner):
             collided = collisions.check_grid(pygame.mouse.get_pos())
-            if (collided) and (g.is_slot_available(grid, collided)): 
-                grid = g.modify_grid(grid, "x", collided)
-                grid = g.modify_grid(grid, "o", computer_choose(grid))
+            if (collided) and (g.is_slot_available(collided)): 
+                g.modify_grid("x", collided)
+                g.modify_grid("o", computer_choose(g.grid))
                 collided = None
-                winner = decide_winner(grid)
+                winner = decide_winner(g.grid)
 
-    draw_grid(screen, grid)
+    draw_grid(screen, g.grid)
     draw_scores(screen)
     if winner:
         draw_win_msg(screen, winner)
