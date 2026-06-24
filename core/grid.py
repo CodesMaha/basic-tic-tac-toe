@@ -19,7 +19,7 @@ class Grid:
     def __init__(self):
         self.grid = []; self.reset_grid()
 
-    def reset_grid(self) -> list[list[str]]:
+    def reset_grid(self) -> None:
         self.grid = [['', '', ''] for _ in range(G_SIZE)]
 
     def is_slot_available(self, index: tuple[int, int]) -> bool:
@@ -71,9 +71,6 @@ class Grid:
         return from Enum class type str | None
         """
 
-        if self._is_draw():
-            return Winner.DRAW
-
         def check_turn(turn: str) -> bool:
             """ check if this turn led to a win or not """
             for i in (
@@ -88,5 +85,8 @@ class Grid:
             if check_turn(i.value):
                 increment_score(i.value)
                 return i
+            
+        if self._is_draw():
+            return Winner.DRAW
         
         return Winner.CONTINUE
