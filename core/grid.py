@@ -86,7 +86,7 @@ class Grid:
         
         for i in (Winner.X, Winner.O):
             if check_turn(i.value):
-                increment_score(i)
+                increment_score(i.value)
                 return i
         
         return Winner.CONTINUE
