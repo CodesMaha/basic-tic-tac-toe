@@ -21,25 +21,25 @@ MARGIN_IC = SQUARE_WIDTH // 6
 pos_grid: list[list[tuple[int,int]]] = [[(0,0) for _ in range(G_SIZE)] for _ in range(G_SIZE)]
 
 
-def get_grid_pos(_pos_grid: list[list[tuple[int,int]]]) -> list[list[tuple[int,int]]]:
+def get_grid_pos(pos_grid_: list[list[tuple[int,int]]]) -> list[list[tuple[int,int]]]:
     """ reinitialize the positions of the topleft of squares on grid relative to grid """
     for i in range(G_SIZE):
         for j in range(G_SIZE):
-            _pos_grid[i][j] = j * SQUARE_WIDTH, i * SQUARE_WIDTH
-    return _pos_grid
+            pos_grid_[i][j] = j * SQUARE_WIDTH, i * SQUARE_WIDTH
+    return pos_grid_
 
-def adjust_grid_pos(_pos_grid: list[list[tuple[int,int]]]) -> list[list[tuple[int,int]]]:
+def adjust_grid_pos(pos_grid_: list[list[tuple[int,int]]]) -> list[list[tuple[int,int]]]:
     """ set grid positions as relative to the screen """
     offset = (SCREEN_SIZE[0] - surf_grid.get_width()) //2, (SCREEN_SIZE[1] - surf_grid.get_height()) //2
     for i in range(G_SIZE):
         for j in range(G_SIZE):
-            _pos_grid[i][j] = cc.add_tuples(pos_grid[i][j], offset)
-    return _pos_grid
+            pos_grid_[i][j] = cc.add_tuples(pos_grid[i][j], offset)
+    return pos_grid_
 
 
 # the actual surfaces getting defined
 def draw_grid_lines(
-        _surf_grid: pygame.Surface, 
+        surf_grid_: pygame.Surface, 
     ) -> pygame.Surface:
     """ four lines for tic-tac-toe """
 
@@ -48,46 +48,45 @@ def draw_grid_lines(
 
         # vertical lines then horizontal lines
         pygame.draw.line(
-            _surf_grid, col.GRID, 
-            (square_offset, 0), (square_offset, _surf_grid.get_height()),
+            surf_grid_, col.GRID, 
+            (square_offset, 0), (square_offset, surf_grid_.get_height()),
             LINE_WEIGHT
         )
         pygame.draw.line(
-            _surf_grid, col.GRID, 
-            (0, square_offset), (_surf_grid.get_width(), square_offset),
+            surf_grid_, col.GRID, 
+            (0, square_offset), (surf_grid_.get_width(), square_offset),
             LINE_WEIGHT
         )
 
-    return _surf_grid
+    return surf_grid_
 
 def draw_x() -> pygame.Surface:
-    _x = pygame.Surface((SQUARE_WIDTH, SQUARE_WIDTH), pygame.SRCALPHA)
-
+    x_ = pygame.Surface((SQUARE_WIDTH, SQUARE_WIDTH), pygame.SRCALPHA)
     x_line_weight = MARGIN_IC * 1.5
 
     pygame.draw.line( # start from topleft
-        _x, col.X, (x_line_weight, x_line_weight), 
+        x_, col.X, (x_line_weight, x_line_weight), 
         (SQUARE_WIDTH - x_line_weight, SQUARE_WIDTH - x_line_weight),
         LINE_WEIGHT
     )
     pygame.draw.line( # start from top right
-        _x, col.X, 
+        x_, col.X, 
         (SQUARE_WIDTH - x_line_weight, x_line_weight), (x_line_weight, SQUARE_WIDTH - x_line_weight),
         LINE_WEIGHT
     )
     
-    return _x
+    return x_
 
 def draw_o() -> pygame.Surface:
-    _o = pygame.Surface((SQUARE_WIDTH, SQUARE_WIDTH), pygame.SRCALPHA)
+    o_ = pygame.Surface((SQUARE_WIDTH, SQUARE_WIDTH), pygame.SRCALPHA)
 
     pygame.draw.circle(
-        _o, col.O, 
+        o_, col.O, 
         (SQUARE_WIDTH //2, SQUARE_WIDTH //2), 
         (SQUARE_WIDTH //2) - MARGIN_IC, LINE_WEIGHT
     )
 
-    return _o
+    return o_
 
 
 # initilizing with functions
