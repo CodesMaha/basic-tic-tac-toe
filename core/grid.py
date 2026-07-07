@@ -1,7 +1,6 @@
 """ has Grid class with methods for grid modification and win checks """
 
 from enum import Enum
-from core.data_handler import increment_score
 
 G_SIZE = 3
 
@@ -30,6 +29,7 @@ class Grid:
 
     def reset_grid(self) -> None:
         self.grid = [['' for _ in range(G_SIZE)] for _ in range(G_SIZE)]
+
 
     def is_slot_available(self, index: tuple[int, int]) -> bool:
         """ 
@@ -89,7 +89,6 @@ class Grid:
         
         for i in (Winner.X, Winner.O):
             if check_turn(i.value):
-                increment_score(i.value)
                 return i
         
         # check last in case win in full board
