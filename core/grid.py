@@ -19,8 +19,17 @@ class Grid:
     def __init__(self):
         self.grid = []; self.reset_grid()
 
+    def stringify(self) -> str:
+        """ flatten 2d list and repl None w space """
+        grid_str: list = []
+        for i in self.grid:
+            for j in i: # iterate rows
+                # space considered empty
+                grid_str.append(j or " ")
+        return "".join(grid_str)
+
     def reset_grid(self) -> None:
-        self.grid = [['', '', ''] for _ in range(G_SIZE)]
+        self.grid = [['' for _ in range(G_SIZE)] for _ in range(G_SIZE)]
 
     def is_slot_available(self, index: tuple[int, int]) -> bool:
         """ 
@@ -59,10 +68,7 @@ class Grid:
     
     def _is_draw(self) -> bool:
         """ check if any slots are available or empty str """
-        for row in self.grid:
-            if any(not col for col in row):
-                return False
-        return True
+        return all(col for row in self.grid for col in row)
 
     def is_win(self) -> Winner:
         """ 
@@ -85,7 +91,8 @@ class Grid:
             if check_turn(i.value):
                 increment_score(i.value)
                 return i
-            
+        
+        # check last in case win in full board
         if self._is_draw():
             return Winner.DRAW
         

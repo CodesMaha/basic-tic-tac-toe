@@ -7,13 +7,14 @@ from rendering.display_score import draw_win_msg, draw_scores
 
 import core.surf_collision as collisions
 from core.grid import Grid, Winner
-from core.other_turn import computer_choose
+from core.other_turn import MENACETurn
 
 # initializations
 screen = pygame.display.set_mode(SCREEN_SIZE)
 pygame.display.set_caption("tic-tac-toe")
 
 g = Grid() # board is g.grid
+mturn = MENACETurn()
 winner: Winner = Winner.CONTINUE
 clock = pygame.time.Clock()
 
@@ -29,7 +30,8 @@ while running:
             collided = collisions.check_grid(pygame.mouse.get_pos())
             if (collided) and (g.is_slot_available(collided)): 
                 g.modify_grid(Winner.X, collided)
-                g.modify_grid(Winner.O, computer_choose(g.grid))
+                # TODO: use of mturn class goes here. past:
+                # g.modify_grid(Winner.O, computer_choose(g.grid))
                 collided = None
                 winner = g.is_win()
 

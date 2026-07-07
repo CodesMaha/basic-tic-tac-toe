@@ -1,10 +1,10 @@
-""" draws on the screen """
+""" draws grid and grid icons on the screen """
 
 import pygame
 from . import icons as ic
 from . import colours as col
 import core.coord_calc as cc
-from core.grid import G_SIZE
+from core.grid import G_SIZE, Winner
 
 def draw_grid(screen: pygame.surface.Surface, grid: list[list[list[str, tuple[int, int]]]]):
     screen.fill(col.BG)
@@ -15,5 +15,5 @@ def draw_grid(screen: pygame.surface.Surface, grid: list[list[list[str, tuple[in
         for i, j in zip(grid[row], ic.pos_grid[row]):
             if not i: 
                 continue # empty slot
-            elif i == "x": screen.blit(ic.x, j)
+            elif i == Winner.X.value: screen.blit(ic.x, j)
             else: screen.blit(ic.o, j) # for o
