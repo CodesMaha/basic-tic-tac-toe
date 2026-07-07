@@ -36,9 +36,10 @@ while running:
             collided = collisions.check_grid(pygame.mouse.get_pos())
             if (collided) and (g.is_slot_available(collided)): 
                 g.modify_grid(Winner.X, collided)
+                collided = None # reset after use
+
                 g.modify_grid(Winner.O, mturn.choose(g.stringify()))
                 matchboxes.write(mturn.matchboxes)
-                collided = None
 
                 winner = g.is_win()
                 if winner in (Winner.X, Winner.O):

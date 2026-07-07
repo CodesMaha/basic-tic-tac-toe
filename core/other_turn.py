@@ -14,10 +14,13 @@ class MENACETurn:
         self.moves.clear()
 
     def get_new_beads(self, grid: str) -> list:
-        """ modify matchboxes with new beads """
+        """ 
+        modify matchboxes with new beads. 
+        multiplier directly proportional to remaining empty space
+        """
         # get all available slots in str version
         new_beads: list[tuple] = [idx for idx, val in zip(self.INDEXES, grid) if val == ' ']
-        self.matchboxes.update({grid: new_beads}) # modify matchboxes
+        self.matchboxes.update({grid: new_beads * (len(new_beads) // 2)}) # modify matchboxes
         return new_beads
 
     def choose(self, grid: str) -> tuple[int, int] | None:
@@ -26,10 +29,9 @@ class MENACETurn:
             self.get_new_beads(grid)
         beads: list[tuple] = self.matchboxes[grid]
 
-        if beads:
-            # more likely to choose idx if more instances
-            bead: tuple[int, int] = choice(beads)
-            self.moves.add((grid, bead))
-        else: # no empty slots
+        if not beads: # empty list
             return None
+        # more likely to choose idx if more instances
+        bead: tuple[int, int] = choice(beads)
+        self.moves.add((grid, bead))
         return bead

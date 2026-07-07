@@ -11,7 +11,7 @@ class DataHandler:
     
     def write(self, data: dict) -> None:
         with open(self.path, "w") as f:
-            pp(data, f)
+            pp(data, f, 2, 300)
 
     def reset(self) -> dict:
         """ reset json file then return resetted data """
