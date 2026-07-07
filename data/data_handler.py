@@ -1,6 +1,7 @@
 """ write and read user data from data.json """
 
-import json
+from ast import literal_eval
+from pprint import pp
 
 class DataHandler:
     def __init__(self, file_path: str, resetted_data: dict):
@@ -10,7 +11,7 @@ class DataHandler:
     
     def write(self, data: dict) -> None:
         with open(self.path, "w") as f:
-            json.dump(data, f)
+            pp(data, f)
 
     def reset(self) -> dict:
         """ reset json file then return resetted data """
@@ -20,14 +21,14 @@ class DataHandler:
     def read(self) -> dict:
         try: # EAFP
             with open(self.path, "r") as f:
-                data = json.load(f)
+                data = literal_eval(f.read())
         except FileNotFoundError:
             data = self.reset()
         return data
 
 class ScoreData(DataHandler):
     def __init__(self):
-        super().__init__("data/score.json", {"x_score": 0, "o_score": 0})
+        super().__init__("data/score.txt", {"x_score": 0, "o_score": 0})
     
     def increment_score(self, winner: str) -> None:
         """ increment score of either x or o by one """
@@ -38,4 +39,4 @@ class ScoreData(DataHandler):
 # TODO: MENACE feature still in progress! store training with this class
 class MatchboxesData(DataHandler):
     def __init__(self):
-        super().__init__("data/score.json", {})
+        super().__init__("data/matchboxes.txt", {})

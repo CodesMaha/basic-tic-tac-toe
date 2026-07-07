@@ -9,17 +9,20 @@ import core.surf_collision as collisions
 from core.grid import Grid, Winner
 from core.other_turn import MENACETurn
 
-from data.data_handler import ScoreData
+from data.data_handler import ScoreData, MatchboxesData
 
 # initializations
 screen = pygame.display.set_mode(SCREEN_SIZE)
 pygame.display.set_caption("tic-tac-toe")
 
 g = Grid() # board is g.grid
-mturn = MENACETurn()
 winner: Winner = Winner.CONTINUE
 clock = pygame.time.Clock()
-scores = ScoreData(); score_data = scores.read()
+
+matchboxes = MatchboxesData()
+mturn = MENACETurn(matchboxes.read())
+scores = ScoreData()
+score_data = scores.read()
 
 running = True
 while running:
@@ -34,10 +37,11 @@ while running:
             if (collided) and (g.is_slot_available(collided)): 
                 g.modify_grid(Winner.X, collided)
                 g.modify_grid(Winner.O, mturn.choose(g.stringify()))
+                matchboxes.write(mturn.matchboxes)
                 collided = None
 
                 winner = g.is_win()
-                if winner.value:
+                if winner in (Winner.X, Winner.O):
                     scores.increment_score(winner.value)
 
     draw_grid(screen, g.grid)
