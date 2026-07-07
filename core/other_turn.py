@@ -34,7 +34,7 @@ class MENACETurn:
     def choose(self, grid: str) -> tuple[int, int] | None:
         """ return grid indexes or None if draw """
         if grid not in self.matchboxes: # keys
-            self.new_beads()
+            self.new_beads(grid)
         beads: list[tuple] = self.matchboxes[grid]
 
         if beads:
